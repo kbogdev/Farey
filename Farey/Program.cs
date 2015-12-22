@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,10 +81,50 @@ namespace Farey
             {
                 for (uint j = i+1; j <= Num; j++)
                 {
-                    Numbers.Add(new FareyNumber(i, j));
+                    if(!canBeDivided(i,j))
+                        Numbers.Add(new FareyNumber(i, j));
                 }
             }
         }
+
+        public static bool optimize
+        {
+            get;
+            set;
+        }
+
+        private bool canBeDivided(uint A, uint B)
+        {
+            if(!optimize)
+                return false;
+
+            uint div = 2;
+            Debug.Assert(A <= B);
+
+            if (A == 1)
+                return false;
+
+            SortedSet<uint>.Enumerator it = primeNums.GetEnumerator();
+            bool isPrime = true;
+            while (it.MoveNext())
+            {
+                if (A % it.Current == 0)
+                {
+                    isPrime = false;
+                    if (B % it.Current == 0)
+                        return true;
+                }
+            }
+
+            if(isPrime)
+            {
+                primeNums.Add(A);
+            }
+
+            return false;
+        }
+
+        private SortedSet<uint> primeNums = new SortedSet<uint>();
     }
 
     class Program
@@ -93,14 +134,23 @@ namespace Farey
             FareyNumbers nums = new FareyNumbers(3);
             Console.WriteLine(nums.ToString());
 
-
+            FareyNumbers.optimize = true;
             DateTime start = DateTime.Now;
-            FareyNumbers bigNum = new FareyNumbers(1000);
+            FareyNumbers bigNum = new FareyNumbers(3000);
             DateTime end = DateTime.Now;
 
             TimeSpan duration = end - start;
             int mseconds = duration.Milliseconds;
             Console.WriteLine(mseconds);
+
+            FareyNumbers.optimize = false;
+            DateTime start2 = DateTime.Now;
+            FareyNumbers bigNum2 = new FareyNumbers(3000);
+            DateTime end2 = DateTime.Now;
+
+            TimeSpan duration2 = end2 - start2;
+            int mseconds2 = duration2.Milliseconds;
+            Console.WriteLine(mseconds2);
 
         }
     }
