@@ -27,10 +27,28 @@ namespace Farey
 
     public class FareyNumbers
     {
+        internal class FareyComparer : IComparer<FareyNumber>
+        {
+            public int Compare(FareyNumber a, FareyNumber b)
+            {
+                FareyNumber fn1 = (FareyNumber)a;
+                FareyNumber fn2 = (FareyNumber)b;
+
+                long tmp = 1;
+                tmp = tmp * fn1.N * fn2.D - tmp * fn1.D * fn2.N;
+                if (tmp > 0)
+                    return 1;
+                if (tmp < 0)
+                    return -1;
+                else
+                    return 0;
+            }
+        }
+
         public readonly uint Num;
         public readonly uint Count;
 
-        public readonly HashSet<FareyNumber> Numbers = new HashSet<FareyNumber>();
+        public readonly SortedSet<FareyNumber> Numbers = new SortedSet<FareyNumber>(new FareyComparer());
 
         public FareyNumbers(uint N)
         {
@@ -42,7 +60,7 @@ namespace Farey
         {
             StringBuilder buffer = new StringBuilder();
 
-            HashSet<FareyNumber>.Enumerator it = Numbers.GetEnumerator();
+            SortedSet<FareyNumber>.Enumerator it = Numbers.GetEnumerator();
             while(it.MoveNext())
             {
                 if(buffer.Length > 0)
@@ -55,48 +73,15 @@ namespace Farey
 
         private void generateNumbers()
         {
-            if(Num == 1)
+            Numbers.Add(new FareyNumber(0, 1));
+            Numbers.Add(new FareyNumber(1, 1));
+
+            for (uint i = 1; i <= Num; i++)
             {
-                Numbers.Add(new FareyNumber(0, 1));
-                Numbers.Add(new FareyNumber(1, 1));
-            }
-            if (Num == 2)
-            {
-                Numbers.Add(new FareyNumber(0, 1));
-                Numbers.Add(new FareyNumber(1, 2));
-                Numbers.Add(new FareyNumber(1, 1));
-            }
-            if (Num == 3)
-            {
-                Numbers.Add(new FareyNumber(0, 1));
-                Numbers.Add(new FareyNumber(1, 3));
-                Numbers.Add(new FareyNumber(1, 2));
-                Numbers.Add(new FareyNumber(2, 3));
-                Numbers.Add(new FareyNumber(1, 1));
-            }
-            if (Num == 4)
-            {
-                Numbers.Add(new FareyNumber(0, 1));
-                Numbers.Add(new FareyNumber(1, 4));
-                Numbers.Add(new FareyNumber(1, 3));
-                Numbers.Add(new FareyNumber(1, 2));
-                Numbers.Add(new FareyNumber(2, 3));
-                Numbers.Add(new FareyNumber(3, 4));
-                Numbers.Add(new FareyNumber(1, 1));
-            }
-            if (Num == 5)
-            {
-                Numbers.Add(new FareyNumber(0, 1));
-                Numbers.Add(new FareyNumber(1, 5));
-                Numbers.Add(new FareyNumber(1, 4));
-                Numbers.Add(new FareyNumber(1, 3));
-                Numbers.Add(new FareyNumber(2, 5));
-                Numbers.Add(new FareyNumber(1, 2));
-                Numbers.Add(new FareyNumber(3, 5));
-                Numbers.Add(new FareyNumber(2, 3));
-                Numbers.Add(new FareyNumber(3, 4));
-                Numbers.Add(new FareyNumber(4, 5));
-                Numbers.Add(new FareyNumber(1, 1));
+                for (uint j = i+1; j <= Num; j++)
+                {
+                    Numbers.Add(new FareyNumber(i, j));
+                }
             }
         }
     }
@@ -105,9 +90,8 @@ namespace Farey
     {
         static void Main(string[] args)
         {
-            FareyNumbers nums = new FareyNumbers(2);
+            FareyNumbers nums = new FareyNumbers(3);
             Console.WriteLine(nums.ToString());
-
         }
     }
 }
