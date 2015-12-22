@@ -35,7 +35,69 @@ namespace Farey
         public FareyNumbers(uint N)
         {
             Num = N;
+            generateNumbers();
             Count = (uint)Numbers.Count;
+        }
+        public override string ToString()
+        {
+            StringBuilder buffer = new StringBuilder();
+
+            HashSet<FareyNumber>.Enumerator it = Numbers.GetEnumerator();
+            while(it.MoveNext())
+            {
+                if(buffer.Length > 0)
+                    buffer.Append(',');
+                buffer.Append(it.Current.ToString());
+            }
+
+            return buffer.ToString();
+        }
+
+        private void generateNumbers()
+        {
+            if(Num == 1)
+            {
+                Numbers.Add(new FareyNumber(0, 1));
+                Numbers.Add(new FareyNumber(1, 1));
+            }
+            if (Num == 2)
+            {
+                Numbers.Add(new FareyNumber(0, 1));
+                Numbers.Add(new FareyNumber(1, 2));
+                Numbers.Add(new FareyNumber(1, 1));
+            }
+            if (Num == 3)
+            {
+                Numbers.Add(new FareyNumber(0, 1));
+                Numbers.Add(new FareyNumber(1, 3));
+                Numbers.Add(new FareyNumber(1, 2));
+                Numbers.Add(new FareyNumber(2, 3));
+                Numbers.Add(new FareyNumber(1, 1));
+            }
+            if (Num == 4)
+            {
+                Numbers.Add(new FareyNumber(0, 1));
+                Numbers.Add(new FareyNumber(1, 4));
+                Numbers.Add(new FareyNumber(1, 3));
+                Numbers.Add(new FareyNumber(1, 2));
+                Numbers.Add(new FareyNumber(2, 3));
+                Numbers.Add(new FareyNumber(3, 4));
+                Numbers.Add(new FareyNumber(1, 1));
+            }
+            if (Num == 5)
+            {
+                Numbers.Add(new FareyNumber(0, 1));
+                Numbers.Add(new FareyNumber(1, 5));
+                Numbers.Add(new FareyNumber(1, 4));
+                Numbers.Add(new FareyNumber(1, 3));
+                Numbers.Add(new FareyNumber(2, 5));
+                Numbers.Add(new FareyNumber(1, 2));
+                Numbers.Add(new FareyNumber(3, 5));
+                Numbers.Add(new FareyNumber(2, 3));
+                Numbers.Add(new FareyNumber(3, 4));
+                Numbers.Add(new FareyNumber(4, 5));
+                Numbers.Add(new FareyNumber(1, 1));
+            }
         }
     }
 
@@ -43,6 +105,9 @@ namespace Farey
     {
         static void Main(string[] args)
         {
+            FareyNumbers nums = new FareyNumbers(2);
+            Console.WriteLine(nums.ToString());
+
         }
     }
 }
