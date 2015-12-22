@@ -36,5 +36,18 @@ namespace FareyUnitTests
             string result = "0/1,1/5,1/4,1/3,2/5,1/2,3/5,2/3,3/4,4/5,1/1";
             Assert.IsTrue(0 == nums.ToString().CompareTo(result));
         }
+        [TestMethod]
+        public void TestMethodPerf()
+        {
+            DateTime start = DateTime.Now;
+            FareyNumbers nums = new FareyNumbers(1000);
+            DateTime end = DateTime.Now;
+
+            TimeSpan duration = end - start;
+            int mseconds = duration.Milliseconds;
+
+            Assert.IsTrue(mseconds < 200);
+
+        }
     }
 }

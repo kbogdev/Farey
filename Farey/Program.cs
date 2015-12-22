@@ -92,6 +92,16 @@ namespace Farey
         {
             FareyNumbers nums = new FareyNumbers(3);
             Console.WriteLine(nums.ToString());
+
+
+            DateTime start = DateTime.Now;
+            FareyNumbers bigNum = new FareyNumbers(1000);
+            DateTime end = DateTime.Now;
+
+            TimeSpan duration = end - start;
+            int mseconds = duration.Milliseconds;
+            Console.WriteLine(mseconds);
+
         }
     }
 }
